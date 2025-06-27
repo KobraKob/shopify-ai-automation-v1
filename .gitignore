@@ -1,4 +1,20 @@
-.venv/
-venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.env
+.env
+venv/
+.env.*
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# CrewAI output cache (if any)
+output/

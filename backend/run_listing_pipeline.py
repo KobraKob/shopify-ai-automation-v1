@@ -27,11 +27,13 @@ def run_listing_pipeline(product_description, additional_details, base_keywords)
         crew = Crew(tasks=[keyword_task, listing_task])
         
         try:
-            # 🔥 MAIN FIX HERE — get the output string from the CrewOutput object
+            # MAIN FIX HERE — get the output string from the CrewOutput object
             result_obj = crew.kickoff()
         except Exception as e:
-            print(f"❌ Crew execution failed: {e}")
-            return {"error": "Crew execution failed", "details": str(e)}
+            import traceback
+            traceback_str = traceback.format_exc()
+            print(f" Crew execution failed: {e}\n{traceback_str}")
+            return {"error": "Crew execution failed", "details": str(e), "traceback": traceback_str}
         
         if isinstance(result_obj, dict):
             # Handle potential error dictionary
@@ -45,20 +47,20 @@ def run_listing_pipeline(product_description, additional_details, base_keywords)
             # Fallback for other types (like CrewOutput)
             result_text = getattr(result_obj, 'output', str(result_obj))
 
-        # 🧹 Clean markdown formatting if present
+        # Clean markdown formatting if present
         cleaned = result_text.replace("```json", "").replace("```", "").strip()
 
-        # 🧠 Try parsing JSON
+        # Try parsing JSON
         try:
             listing = json.loads(cleaned)
         except json.JSONDecodeError as e:
             raise ValueError(f"JSON decode failed: {e}\nRaw output: {cleaned}")
 
-        # ✅ Upload to Shopify (optional)
+        # Upload to Shopify (optional)
         upload_product(listing['title'], listing['description'], listing['tags'])
 
         return listing
 
     except Exception as e:
-        print(f"❌ Error in pipeline: {str(e)}")
+        print(f" Error in pipeline: {str(e)}")
         return {"error": "Listing generation failed", "details": str(e)}
