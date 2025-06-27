@@ -1,0 +1,1 @@
+from main import run_listing_pipeline; print(run_listing_pipeline('test product', 'test details'))
