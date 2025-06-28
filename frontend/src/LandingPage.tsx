@@ -142,8 +142,8 @@ export default function LandingPage() {
           <Link to="#">Privacy Policy</Link>
           <Link to="#">Terms of Service</Link>
           <Link to="#">Contact Us</Link>
-          <p>A small project by Balavanth</p>
         </div>
+        
       </footer>
     </div>
   )
