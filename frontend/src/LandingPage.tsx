@@ -137,11 +137,12 @@ export default function LandingPage() {
       </main>
 
       <footer className="landing-footer">
-        <p>© {new Date().getFullYear()} Shopify AI Generator. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Ellie (E.L.I. – Ecommerce Listing Intelligence). All rights reserved.</p>
         <div className="footer-links">
           <Link to="#">Privacy Policy</Link>
           <Link to="#">Terms of Service</Link>
           <Link to="#">Contact Us</Link>
+          <p>A small project by Balavanth</p>
         </div>
       </footer>
     </div>
