@@ -1,13 +1,25 @@
-from dotenv import load_dotenv
 import os
+from dotenv import load_dotenv
+load_dotenv()
+
+# Configure for SambaNova
+sambanova_api_key = os.getenv("SAMBANOVA_API_KEY")
+if not sambanova_api_key:
+    raise ValueError("SAMBANOVA_API_KEY environment variable not set. Please set it in your .env file.")
+
+os.environ["OPENAI_API_KEY"] = sambanova_api_key
+os.environ["OPENAI_API_BASE"] = os.getenv("OPENAI_API_BASE")
+os.environ["OPENAI_API_VERSION"] = os.getenv("OPENAI_API_VERSION")
+os.environ["LITE_LLM_API_BASE"] = os.getenv("LITE_LLM_API_BASE")
+os.environ["LITE_LLM_API_VERSION"] = os.getenv("LITE_LLM_API_VERSION")
+os.environ["SAMBANOVA_API_KEY"] = sambanova_api_key
+
 import json
 from crewai import Crew, Task
 from agents.researcher_agent import researcher_agent
 from agents.writer_agent import writer_agent
 from utils.prompt_templates import shopify_listing_prompt
 from shopify_uploader import upload_product
-
-load_dotenv()
 
 def run_listing_pipeline(product_description, additional_details, base_keywords, upload=False):
     try:
@@ -35,17 +47,12 @@ def run_listing_pipeline(product_description, additional_details, base_keywords,
             print(f" Crew execution failed: {e}\n{traceback_str}")
             return {"error": "Crew execution failed", "details": str(e), "traceback": traceback_str}
         
-        if isinstance(result_obj, dict):
-            # Handle potential error dictionary
-            if 'error' in result_obj:
-                raise Exception(f"Crew failed: {result_obj['error']}")
-            # Look for a more structured output
-            result_text = result_obj.get('result', str(result_obj))
-        elif isinstance(result_obj, str):
+        if isinstance(result_obj, str):
             result_text = result_obj
+        elif hasattr(result_obj, 'output'):
+            result_text = result_obj.output
         else:
-            # Fallback for other types (like CrewOutput)
-            result_text = getattr(result_obj, 'output', str(result_obj))
+            result_text = str(result_obj)
 
         # Clean markdown formatting if present
         cleaned = result_text.replace("```json", "").replace("```", "").strip()
