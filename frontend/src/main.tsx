@@ -1,16 +1,30 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import LandingPage from './LandingPage.tsx'
 import App from './App.tsx';
 import './index.css';
 
-// Initialize particles.js after render
-const root = ReactDOM.createRoot(document.getElementById('root')!);
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <LandingPage />,
+  },
+  {
+    path: '/generator',
+    element: <App />,
+  },
+])
+
+const root = ReactDOM.createRoot(document.getElementById('root')!)
 
 root.render(
   <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+    <RouterProvider router={router} />
+  </React.StrictMode>
+)
+
 
 // Initialize particles.js after the component mounts
 document.addEventListener('DOMContentLoaded', () => {
