@@ -9,7 +9,7 @@ from shopify_uploader import upload_product
 
 load_dotenv()
 
-def run_listing_pipeline(product_description, additional_details, base_keywords):
+def run_listing_pipeline(product_description, additional_details, base_keywords, upload=False):
     try:
         keyword_task = Task(
             description=f"Find trending SEO keywords for Shopify product: {product_description}",
@@ -57,7 +57,8 @@ def run_listing_pipeline(product_description, additional_details, base_keywords)
             raise ValueError(f"JSON decode failed: {e}\nRaw output: {cleaned}")
 
         # Upload to Shopify (optional)
-        upload_product(listing['title'], listing['description'], listing['tags'])
+        if upload:
+            upload_product(listing['title'], listing['description'], listing['tags'])
 
         return listing
 

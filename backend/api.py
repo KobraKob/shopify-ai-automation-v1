@@ -14,12 +14,12 @@ def generate_listing():
         product_description = data.get("product_description")
         additional_details = data.get("additional_details")
         base_keywords = data.get("base_keywords")
+        upload_flag = data.get("upload", False)  # Default to False if not provided
 
         if not product_description or not additional_details or not base_keywords:
             return jsonify({"error": "Missing required fields"}), 400
 
-        result = run_listing_pipeline(product_description, additional_details, base_keywords)
-
+        result = run_listing_pipeline(product_description, additional_details, base_keywords, upload=upload_flag)
 
         if "error" in result:
             return jsonify(result), 500
